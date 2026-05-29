@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useCalculatorStore } from "@/store/calculatorStore";
 import type { Operator } from "@/types/calculator";
 
-const operatorMap: Record<string, Operator> = {
+const operatorMap: Record<string, Exclude<Operator, null>> = {
   "+": "+",
   "-": "-",
   "*": "*",

@@ -5,6 +5,7 @@ import {
   appendDigit,
   appendSquareToExpression,
   appendToExpression,
+  replaceOrAppendOperator,
   applyPercentage,
   calculate,
   evaluateExpression,
@@ -47,7 +48,7 @@ interface CalculatorState {
   inputDecimal: () => void;
   clear: () => void;
   backspace: () => void;
-  chooseOperator: (op: Operator) => void;
+  chooseOperator: (op: Exclude<Operator, null>) => void;
   calculateResult: () => void;
   toggleSign: () => void;
   percentage: () => void;
@@ -235,46 +236,16 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
   },
 
   chooseOperator: (op) => {
-    const { display, previousValue, operator, waitingForOperand, expressionMode } =
-      get();
-    const inExpr = expressionMode || isExpressionString(display);
+    const { display } = get();
+    const symbol = OP_SYMBOLS[op];
 
-    if (inExpr) {
-      set({
-        display: appendToExpression(display, ` ${OP_SYMBOLS[op]} `),
-        expressionMode: true,
-        waitingForOperand: false,
-        previousValue: null,
-        operator: null,
-      });
-      return;
-    }
-
-    const input = parseDisplay(display);
-
-    if (operator && previousValue !== null && !waitingForOperand) {
-      const prev = parseDisplay(previousValue);
-      const { result, error } = calculate(prev, input, operator);
-      if (error) {
-        set({
-          display: "Error",
-          previousValue: null,
-          operator: null,
-          waitingForOperand: true,
-        });
-        return;
-      }
-      const next = formatNumber(result);
-      set({
-        display: next,
-        previousValue: next,
-        operator: op,
-        waitingForOperand: true,
-      });
-      return;
-    }
-
-    set({ previousValue: display, operator: op, waitingForOperand: true });
+    set({
+      display: replaceOrAppendOperator(display, symbol),
+      expressionMode: true,
+      waitingForOperand: false,
+      previousValue: null,
+      operator: null,
+    });
   },
 
   calculateResult: () => {

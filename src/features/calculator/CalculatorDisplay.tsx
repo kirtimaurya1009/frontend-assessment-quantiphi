@@ -5,8 +5,6 @@ import { useCalculatorStore } from "@/store/calculatorStore";
 
 export function CalculatorDisplay() {
   const display = useCalculatorStore((s) => s.display);
-  const previousValue = useCalculatorStore((s) => s.previousValue);
-  const operator = useCalculatorStore((s) => s.operator);
   const hasMemory = useCalculatorStore((s) => s.hasMemory);
   const memory = useCalculatorStore((s) => s.memory);
   const scientificOpen = useCalculatorStore((s) => s.scientificOpen);
@@ -18,10 +16,7 @@ export function CalculatorDisplay() {
       aria-live="polite"
       aria-label="Calculator display"
     >
-      <div className="min-h-5 text-xs text-muted flex items-center justify-between gap-2">
-        <span className="truncate">
-          {previousValue && operator ? `${previousValue} ${operator}` : ""}
-        </span>
+      <div className="min-h-5 flex items-center justify-end gap-2 text-xs text-muted">
         <span className="flex shrink-0 gap-2">
           {scientificOpen && (
             <span className="uppercase" aria-label="Angle unit">

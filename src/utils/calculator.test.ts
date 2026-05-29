@@ -5,6 +5,7 @@ import {
   calculate,
   evaluateExpression,
   formatNumber,
+  replaceOrAppendOperator,
   sanitizeDisplay,
   toggleSign,
 } from "@/utils/calculator";
@@ -56,6 +57,13 @@ describe("calculator utils", () => {
     expect(evaluateExpression("sin(1.5707963267948966)", "rad").result).toBeCloseTo(
       1,
     );
+  });
+
+  it("builds chained basic expressions", () => {
+    expect(replaceOrAppendOperator("9", "×")).toBe("9 × ");
+    expect(appendDigit("9 × ", "6")).toBe("9 × 6");
+    expect(replaceOrAppendOperator("9 × 6", "+")).toBe("9 × 6 + ");
+    expect(evaluateExpression("9 × 6").result).toBe(54);
   });
 
   it("evaluates other scientific expressions", () => {

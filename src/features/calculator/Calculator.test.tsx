@@ -13,6 +13,17 @@ describe("Calculator", () => {
     cleanup();
   });
 
+  it("shows the full expression before equals", () => {
+    render(<Calculator />);
+    useCalculatorStore.setState({ scientificOpen: false });
+
+    fireEvent.click(screen.getByRole("button", { name: "9" }));
+    fireEvent.click(screen.getByRole("button", { name: "×" }));
+    fireEvent.click(screen.getByRole("button", { name: "6" }));
+
+    expect(screen.getByTestId("calc-display")).toHaveTextContent("9 × 6");
+  });
+
   it("renders display and performs addition", () => {
     render(<Calculator />);
 

@@ -102,6 +102,16 @@ export function appendToExpression(current: string, token: string): string {
   return current + token;
 }
 
+/** Append an operator or replace the trailing one while building a formula. */
+export function replaceOrAppendOperator(current: string, opSymbol: string): string {
+  if (current === "Error") return opSymbol;
+  const trimmed = current.trimEnd();
+  if (/\s[×÷+\-−]\s*$/.test(current) || /[×÷+\-−]$/.test(trimmed)) {
+    return current.replace(/\s*[×÷+\-−]\s*$/, ` ${opSymbol} `);
+  }
+  return appendToExpression(current, ` ${opSymbol} `);
+}
+
 export function appendSquareToExpression(display: string): string {
   if (display === "0" || display === "Error") return "0²";
   if (/^[-+]?[\d.]+$/.test(display)) return `${display}²`;
