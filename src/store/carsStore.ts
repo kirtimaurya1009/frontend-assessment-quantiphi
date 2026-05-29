@@ -2,6 +2,7 @@ import { create } from "zustand";
 import type { CarFilters, SortOption } from "@/types/car";
 import { DEFAULT_CAR_FILTERS } from "@/types/car";
 
+// Filter/sort/page state only — useCars does the actual fetching.
 export const useCarsStore = create<{
   filters: CarFilters;
   sort: SortOption;
@@ -21,6 +22,7 @@ export const useCarsStore = create<{
   limit: 6,
   selectedCarId: null,
 
+  // back to page 1 whenever filters change so we don't show an empty page
   setFilters: (partial) =>
     set((s) => ({ filters: { ...s.filters, ...partial }, page: 1 })),
 

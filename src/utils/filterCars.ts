@@ -1,5 +1,6 @@
 import type { Car, CarFilters, SortOption } from "@/types/car";
 
+/* Shared between the real API route and MSW — keep behaviour in sync. */
 export function filterAndSortCars(
   cars: Car[],
   filters: CarFilters,

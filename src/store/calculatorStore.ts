@@ -94,7 +94,7 @@ function addHistory(
   ].slice(0, 15);
 }
 
-/** Numeric value on screen (evaluates expressions when needed). */
+// What M+ / M- should add or subtract — works for plain numbers and formulas.
 function getDisplayNumericValue(state: CalculatorState): number | null {
   const { display, expressionMode, angleMode } = state;
 
@@ -110,6 +110,11 @@ function getDisplayNumericValue(state: CalculatorState): number | null {
   return Number.isNaN(num) ? null : num;
 }
 
+/*
+ * Calculator state — mostly expression mode now (full formula on display).
+ * waitingForOperand: after = or M+/M-, next digit starts fresh.
+ * hasMemory: cleared vs storing zero are different things.
+ */
 export const useCalculatorStore = create<CalculatorState>((set, get) => ({
   display: "0",
   previousValue: null,
@@ -123,7 +128,7 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
   angleMode: "deg",
 
   memory: 0,
-  hasMemory: false,
+  hasMemory: false, // separate from memory === 0
 
   setHistoryOpen: (historyOpen) => set({ historyOpen }),
   toggleScientificOpen: () =>
@@ -197,6 +202,7 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
   toggleSign: () => {
     const { display, expressionMode } = get();
     if (expressionMode || isExpressionString(display)) {
+      // Can't just flip a minus on "sin(30" — wrap the whole thing.
       set({
         display:
           display.startsWith("(") || display.startsWith("-")
@@ -239,6 +245,7 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
     const { display } = get();
     const symbol = OP_SYMBOLS[op];
 
+    // Show "9 × 6" on one line instead of splitting across the display.
     set({
       display: replaceOrAppendOperator(display, symbol),
       expressionMode: true,
@@ -276,6 +283,7 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
       return;
     }
 
+    // Old two-number path — kept for safety, expression mode handles almost everything now.
     if (previousValue === null || !operator) return;
 
     const a = parseDisplay(previousValue);

@@ -4,7 +4,7 @@ const MAX_DISPLAY_LENGTH = 16;
 
 export type UnaryOp = "sqrt" | "square" | "reciprocal" | "sin" | "cos" | "tan";
 
-/** Format a numeric result as plain decimal text (never scientific notation). */
+// Keep results readable — no 1e+21 on the display.
 export function formatNumber(num: number): string {
   if (!Number.isFinite(num)) return "Error";
   if (Object.is(num, -0) || num === 0) return "0";
@@ -92,6 +92,7 @@ export function parseDisplay(value: string): number {
 
 export function isExpressionString(value: string): boolean {
   if (value === "Error") return false;
+  // Has operators or sci notation — treat as a formula, not a single number.
   return /[a-zπ√²^()]|×|÷|−/.test(value);
 }
 
@@ -102,7 +103,7 @@ export function appendToExpression(current: string, token: string): string {
   return current + token;
 }
 
-/** Append an operator or replace the trailing one while building a formula. */
+// Typing + when the last char is already an operator swaps it out (9 × → 9 +).
 export function replaceOrAppendOperator(current: string, opSymbol: string): string {
   if (current === "Error") return opSymbol;
   const trimmed = current.trimEnd();
@@ -115,9 +116,10 @@ export function replaceOrAppendOperator(current: string, opSymbol: string): stri
 export function appendSquareToExpression(display: string): string {
   if (display === "0" || display === "Error") return "0²";
   if (/^[-+]?[\d.]+$/.test(display)) return `${display}²`;
-  return `(${display})²`;
+  return `(${display})²`; // (2+3)² not 2+3²
 }
 
+// User left parens open — close them so sin(30 still works.
 export function balanceParentheses(expr: string): string {
   const open = (expr.match(/\(/g) || []).length;
   const close = (expr.match(/\)/g) || []).length;
@@ -126,6 +128,10 @@ export function balanceParentheses(expr: string): string {
 }
 
 function normalizeExpression(expr: string): string {
+  /*
+   * Display uses × ÷ − and sin( — convert to JS.
+   * Trig fns renamed to sinT etc. so we can pass deg/rad helpers in.
+   */
   return balanceParentheses(expr)
     .replace(/×/g, "*")
     .replace(/÷/g, "/")
@@ -169,6 +175,7 @@ export function evaluateExpression(
     const normalized = normalizeExpression(trimmed);
     const trig = trigHelpers(angleMode);
 
+    // Not eval(userInput) — regex above limits what gets through.
     // eslint-disable-next-line no-new-func
     const result = Function(
       `"use strict";

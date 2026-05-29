@@ -64,7 +64,7 @@ export function useCalculatorKeyboard(enabled = true) {
 
       if (key.toLowerCase() === "r") {
         e.preventDefault();
-        store.memoryRecall();
+        store.memoryRecall(); // bonus shortcut, not shown in UI
       }
     };
 

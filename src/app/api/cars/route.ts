@@ -4,6 +4,7 @@ import { filterAndSortCars } from "@/utils/filterCars";
 import type { CarFilters, SortOption } from "@/types/car";
 import { DEFAULT_CAR_FILTERS } from "@/types/car";
 
+// Should match src/mocks/handlers.ts
 function parseFilters(searchParams: URLSearchParams): CarFilters {
   return {
     search: searchParams.get("search") ?? DEFAULT_CAR_FILTERS.search,

@@ -15,6 +15,7 @@ function buildQuery(
   limit: number,
 ): string {
   const params = new URLSearchParams();
+  // empty make/fuel = "all"; price/year bounds always go on the query string
   if (filters.search) params.set("search", filters.search);
   if (filters.make) params.set("make", filters.make);
   params.set("minPrice", String(filters.minPrice));

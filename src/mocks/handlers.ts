@@ -4,6 +4,7 @@ import { filterAndSortCars } from "@/utils/filterCars";
 import type { CarFilters, SortOption } from "@/types/car";
 import { DEFAULT_CAR_FILTERS } from "@/types/car";
 
+// Same handlers as src/app/api/cars — tests don't need next dev running.
 function parseFilters(url: URL): CarFilters {
   return {
     search: url.searchParams.get("search") ?? DEFAULT_CAR_FILTERS.search,

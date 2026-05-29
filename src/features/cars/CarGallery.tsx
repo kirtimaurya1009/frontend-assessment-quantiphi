@@ -14,7 +14,7 @@ export function CarGallery({ images, alt }: { images: string[]; alt: string }) {
 
   const goTo = (next: number) => {
     setIndex(next);
-    setUsePlaceholder(false);
+    setUsePlaceholder(false); // try the real image again when user navigates
   };
 
   return (

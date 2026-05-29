@@ -6,6 +6,10 @@ import { useCarsStore } from "@/store/carsStore";
 import { useDebounce } from "@/hooks/useDebounce";
 import type { Car } from "@/types/car";
 
+/*
+ * Loads cars from the API. Search is debounced; everything else refetches right away.
+ * Page 1 replaces the list, page 2+ appends (load more).
+ */
 export function useCars() {
   const { filters, sort, page, limit } = useCarsStore();
   const search = useDebounce(filters.search, 300);
@@ -45,7 +49,7 @@ export function useCars() {
 
     load();
     return () => {
-      cancelled = true;
+      cancelled = true; // filter changed while request was in flight
     };
   }, [filters, search, sort, page, limit, reload]);
 
