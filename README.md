@@ -1,5 +1,7 @@
 # Frontend assessment
 
+**Live demo:** https://frontend-assessment-quantiphi.vercel.app/
+
 Two-page Next.js app:
 
 - `/calculator` — basic calculator with history and keyboard shortcuts
@@ -44,4 +46,10 @@ src/
 
 ## Deploy
 
-Works on Vercel with default Next.js settings. No env vars required.
+Production build is hosted on Vercel: [https://frontend-assessment-quantiphi.vercel.app/](https://frontend-assessment-quantiphi.vercel.app/)
+
+## AI usage
+
+I used Cursor (AI-assisted coding) as a development aid during this assessment. I worked from the given requirements and used it to speed up scaffolding of the Next.js project structure, including routing, Zustand stores, shared UI components, and feature-based folder organization.
+
+It also helped me implement parts of the calculator and cars flows, set up initial testing with Vitest and Playwright, and debug issues during development. AI was used as a productivity tool to assist with implementation and debugging, while the final decisions, testing, and submission quality remain my responsibility.
