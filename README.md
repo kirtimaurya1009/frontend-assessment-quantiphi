@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend assessment
 
-## Getting Started
+Two-page Next.js app:
 
-First, run the development server:
+- `/calculator` — basic calculator with history and keyboard shortcuts
+- `/cars` — used car listings with filters, sorting, and a detail modal
+
+## Setup
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Requires Node 20+.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+- `npm run dev` — development server
+- `npm run build` — production build
+- `npm run test` — unit tests (Vitest)
+- `npm run test:e2e` — end-to-end tests (Playwright, run `npx playwright install chromium` first)
 
-To learn more about Next.js, take a look at the following resources:
+## Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js (App Router), TypeScript, Tailwind CSS, Zustand, Framer Motion, MSW (used in tests).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Car data is served from `src/app/api/cars` using mock data in `src/mocks/data/cars.ts`. MSW handlers in `src/mocks/handlers.ts` mirror the same API for Vitest.
 
-## Deploy on Vercel
+## Project layout
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+  app/           routes + API
+  components/    shared UI
+  features/      calculator + cars pages
+  hooks/         useCars, useDebounce
+  store/         Zustand stores
+  mocks/         mock data + MSW
+  utils/         calculator + filter helpers
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy
+
+Works on Vercel with default Next.js settings. No env vars required.
